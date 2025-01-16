@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Sensor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+    <link rel="stylesheet" href="style.css">
+
+
+    <script>
+      function fetchData() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "get_data.php", true);
+        xhr.onload = function () {
+          if (xhr.status == 200) {
+            var data = JSON.parse(xhr.responseText);
+
+            // Display turbidity and pH values from the first data entry (latest data)
+            document.getElementById("turbidity").innerText = data[0].turbidity;
+            document.getElementById("ph").innerText = data[0].ph;
+
+            // Determine water status based on turbidity
+            var turbidityStatus = "";
+            if (data[0].turbidity >= 0 && data[0].turbidity <= 30) {
+              turbidityStatus = "Air Bersih";
+            } else if (data[0].turbidity > 30 && data[0].turbidity <= 50) {
+              turbidityStatus = "Air Keruh";
+            } else if (data[0].turbidity > 50 && data[0].turbidity <= 100) {
+              turbidityStatus = "Air Sangat Keruh";
+            } else {
+              turbidityStatus = "Data Tidak Valid";
+            }
+
+            // Display turbidity status
+            document.getElementById("turbidityStatus").innerText = turbidityStatus;
+
+            // Determine pH status based on value
+            var phStatus = "";
+            if (data[0].ph >= 4.0 && data[0].ph < 6.0) {
+              phStatus = "Asam";
+            } else if (data[0].ph >= 6.0 && data[0].ph <= 7.5) {
+              phStatus = "Netral";
+            } else if (data[0].ph > 7.5) {
+              phStatus = "Basa";
+            } else {
+              phStatus = "Data tidak valid";
+            }
+            
+            // Display pH status
+            document.getElementById("phStatus").innerText = phStatus;
+
+            // Display data history in a table
+            var table = document.getElementById("dataHistory");
+            table.innerHTML = ""; // Clear the table before reloading data
+
+            // Create table header
+            var header = table.insertRow(0);
+            header.insertCell(0).outerHTML = "<th>Tanggal</th>";
+            header.insertCell(1).outerHTML = "<th>Pukul</th>";
+            header.insertCell(2).outerHTML = "<th>Kekeruhan</th>";
+            header.insertCell(3).outerHTML = "<th>Status Kekeruhan</th>";
+            header.insertCell(4).outerHTML = "<th>pH</th>";
+            header.insertCell(5).outerHTML = "<th>Status pH</th>";
+
+            // Add data to the table
+            for (var i = 0; i < data.length; i++) {
+              var row = table.insertRow(i + 1); // Add a new row
+              row.insertCell(0).innerText = data[i].tanggal; // Make sure data.tanggal exists in the response
+              row.insertCell(1).innerText = data[i].pukul; // Make sure data.pukul exists in the response
+              row.insertCell(2).innerText = data[i].turbidity;
+              row.insertCell(3).innerText = (function (turbidity) {
+                if (turbidity >= 0 && turbidity <= 30) return "Air Bersih";
+                else if (turbidity > 30 && turbidity <= 50) return "Air Keruh";
+                else if (turbidity > 50 && turbidity <= 100) return "Air Sangat Keruh";
+                else return "Data Tidak Valid";
+              })(data[i].turbidity); // Turbidity status
+              row.insertCell(4).innerText = data[i].ph;
+              row.insertCell(5).innerText = (function (ph) {
+                if (ph >= 4.0 && ph < 6.0) return "Asam";
+                else if (ph >= 6.0 && ph <= 7.5) return "Netral";
+                else if (ph > 7.5) return "Basa";
+                else return "Data tidak valid";
+              })(data[i].ph); // pH status
+            }
+          }
+        };
+        xhr.send();
+      }
+
+      // Refresh data every 1 second
+      setInterval(fetchData, 1000);
+    </script>
+  </head>
+  <body onload="fetchData()">
+    <!-- Sidebar -->
+    <div id="sidebar">
+      <h4 class="text-white text-center">Akuaponik</h4>
+      <a href="index.html">Dashboard</a>
+      <a href="kontrol_pakan.html">Kontrol Pakan</a> <!-- Empty link -->
+    </div>
+
+    <!-- Main Content -->
+    <div id="content">
+      <div class="container mt-4">
+        <!-- Header Card -->
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <h3 class="card-title">Sistem Monitoring Kualitas Air Selada Akuaponik</h3>
+          </div>
+        </div>
+    
+        <div class="row">
+          <!-- Left Column for Cards -->
+          <div class="col-md-6">
+            <div class="row">
+              <!-- Turbidity Card -->
+              <div class="col-6">
+                <div class="card mb-3">
+                  <div class="card-header">Kekeruhan</div>
+                  <div class="card-body">
+                    <p id="turbidity" class="card-text">Kekeruhan: N/A</p>
+                  </div>
+                </div>
+              </div>
+    
+              <!-- Turbidity Status Card -->
+              <div class="col-6">
+                <div class="card mb-3">
+                  <div class="card-header">Status Kekeruhan</div>
+                  <div class="card-body">
+                    <p id="turbidityStatus" class="card-text">Status Kekeruhan: N/A</p>
+                  </div>
+                </div>
+              </div>
+    
+              <!-- pH Card -->
+              <div class="col-6">
+                <div class="card mb-3">
+                  <div class="card-header">pH</div>
+                  <div class="card-body">
+                    <p id="ph" class="card-text">pH: N/A</p>
+                  </div>
+                </div>
+              </div>
+    
+              <!-- pH Status Card -->
+              <div class="col-6">
+                <div class="card mb-3">
+                  <div class="card-header">Status pH</div>
+                  <div class="card-body">
+                    <p id="phStatus" class="card-text">Status pH: N/A</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Right Column for Kontrol Pakan -->
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3 class="card-title">Kontrol Pakan</h3>
+                <div>
+                  <label for="servoInterval" class="form-label">Pilih Waktu Pakan</label>
+        <select class="form-select mb-2" id="servoInterval" onchange="updateServoInterval()">
+          <option value="10">6 Jam</option>
+          <option value="20">8 Jam</option>
+          <option value="30">12 Jam</option>
+        </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Data History -->
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h3 class="card-title text-center">Riwayat Data</h3>
+                <table id="dataHistory" class="table table-bordered">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Tanggal</th>
+                      <th>Pukul</th>
+                      <th>Kekeruhan</th>
+                      <th>Status Kekeruhan</th>
+                      <th>pH</th>
+                      <th>Status pH</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Data history will be populated by JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      function updateServoInterval() {
+    var interval = document.getElementById("servoInterval").value;
+    setServoInterval(interval);
+  }
+      function setServoInterval(interval) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "http://192.168.1.13/setServo?interval=" + interval, true);
+        xhr.onload = function () {
+          if (xhr.status == 200) {
+            alert("Servo interval diperbarui menjadi " + interval + " detik.");
+          }
+        };
+        xhr.send();
+      }
+    </script>
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
