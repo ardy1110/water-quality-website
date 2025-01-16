@@ -1,0 +1,126 @@
+
+  /* Sidebar Styles */
+  #sidebar {
+    width: 250px;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: #3498db;
+    color: white;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  #sidebar h4 {
+    font-weight: 600;
+    color: white;
+  }
+
+  #sidebar .nav-link {
+    font-size: 16px;
+    padding: 10px 20px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    display: block;
+  }
+
+  #sidebar .nav-link:hover {
+    background-color: #2980b9;
+    border-radius: 5px;
+  }
+
+  #sidebar a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: white;
+  }
+
+  #sidebar a:hover {
+    background-color: #2980b9;
+  }
+
+  /* Content Section */
+  #content {
+    margin-left: 250px; /* Adjust the content to the right of the sidebar */
+    padding: 20px;
+  }
+
+  /* Header Card */
+  .card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  /* Cards for Monitoring */
+  .card-header {
+    font-weight: 600;
+    color: #333;
+    background-color: #ecf0f1;
+  }
+
+  .card-body {
+    font-size: 16px;
+    color: #555;
+  }
+
+  /* Data History Table */
+  .table th,
+  .table td {
+    text-align: center;
+  }
+
+  /* Table Header */
+  .thead-light th {
+    background-color: #3498db;
+    color: white;
+  }
+
+  /* Custom Styles for Select and Label */
+  .form-label {
+    font-weight: 600;
+    color: #333;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+
+  .form-select:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+
+  /* Hover effect for cards */
+  .card:hover {
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+    transition: transform 0.2s ease-in-out;
+  }
+
+  /* Responsiveness */
+  @media (max-width: 767px) {
+    #sidebar {
+      width: 200px;
+    }
+
+    #content {
+      margin-left: 200px;
+    }
+
+    .card-title {
+      font-size: 20px;
+    }
+
+    .form-select {
+      font-size: 14px;
+    }
+  }
+
